@@ -28,7 +28,9 @@ protected:
     std::array<std::array<ofTexture, 4>, 6> channels;
     ofTexture keyboardTexture;
     ofPixels keyboardTexturePixels;
-    bool useMouse, advanceTime;
+    bool useMouse, advanceTime, useAutoUpdate;
+    long lastUpdateTime;
+    string shaderfile;
     ofVec2f mousepos;
     ofVec2f dimensions;
     ofCamera *camera;
@@ -46,6 +48,7 @@ public:
     virtual void end() const;
     virtual void update(ofEventArgs&);
     virtual void setUseMouse(bool);
+    virtual void setUseAutoUpdate(bool);
     virtual void setAdvanceTime(bool);
     virtual void draw(float x, float y) { draw(x, y, 0, dimensions.x, dimensions.y); }
     virtual void draw(float x, float y, float w, float h) { draw(x, y, 0, w, h); }
