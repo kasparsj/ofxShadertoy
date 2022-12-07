@@ -30,7 +30,7 @@ protected:
     ofPixels keyboardTexturePixels;
     bool useMouse, advanceTime, useAutoUpdate;
     long lastUpdateTime;
-    string shaderfile;
+    string mainShaderFile;
     ofVec2f mousepos;
     ofVec2f dimensions;
     ofCamera *camera;

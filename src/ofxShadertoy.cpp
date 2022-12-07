@@ -204,7 +204,7 @@ bool ofxShadertoy::load(string shaderfilename, Buffer buffer) {
         return makeShader(b.getText(), soundShader);
     case Buffer::Image:
     default:
-        shaderfile = shaderfilename;
+        mainShaderFile = shaderfilename;
         return makeShader(b.getText(), mainShader);
     }
     
@@ -264,15 +264,15 @@ void ofxShadertoy::update(ofEventArgs &event) {
         mousepos.set(ofGetMouseX(), ofGetMouseY());
     }
     // Added to use autoUpdate
-    if(useAutoUpdate && ofFile::doesFileExist(shaderfile)){
-        long latestUpdate = std::filesystem::last_write_time(shaderfile);
+    if(useAutoUpdate && ofFile::doesFileExist(mainShaderFile)){
+        long latestUpdate = std::filesystem::last_write_time(mainShaderFile);
         if (lastUpdateTime != latestUpdate){
             ofLogVerbose("ofxGLSLSandbox")<<"update shaderfile!";
             lastUpdateTime = latestUpdate;
-            load(shaderfile);
+            load(mainShaderFile);
         }
     }else{
-        ofLogVerbose("ofxGLSLSandbox")<<"not found " + shaderfile;
+        ofLogVerbose("ofxGLSLSandbox")<<"not found " + mainShaderFile;
     }
 }
 
