@@ -265,7 +265,7 @@ void ofxShadertoy::update(ofEventArgs &event) {
     }
     // Added to use autoUpdate
     if(useAutoUpdate && ofFile::doesFileExist(mainShaderFile)){
-        long latestUpdate = std::filesystem::last_write_time(mainShaderFile);
+        long latestUpdate = std::filesystem::last_write_time(ofToDataPath(mainShaderFile));
         if (lastUpdateTime != latestUpdate){
             ofLogVerbose("ofxGLSLSandbox")<<"update shaderfile!";
             lastUpdateTime = latestUpdate;
