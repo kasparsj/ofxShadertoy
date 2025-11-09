@@ -115,4 +115,6 @@ public:
     virtual void setUniformMatrix4f(std::string const & uniformName, ofMatrix4x4 const & matrix) const;
 
     virtual void setUniformTexture(std::string const & uniform, ofTexture const & texture, int location) const;
+
+    std::time_t getLastModified(std::string path);
 };

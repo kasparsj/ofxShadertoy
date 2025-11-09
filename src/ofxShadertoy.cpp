@@ -7,6 +7,17 @@
 //
 
 #include "ofxShadertoy.h"
+#include <chrono>
+#include <filesystem>
+
+template <typename TP>
+std::time_t to_time_t(TP tp)
+{
+    using namespace std::chrono;
+    auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now()
+              + system_clock::now());
+    return system_clock::to_time_t(sctp);
+}
 
 bool ofxShadertoy::makeShader(std::string const & textBuffer, ofShader & outShader) {
     ofShader currentShader;
@@ -265,7 +276,7 @@ void ofxShadertoy::update(ofEventArgs &event) {
     }
     // Added to use autoUpdate
     if(useAutoUpdate && ofFile::doesFileExist(mainShaderFile)){
-        long latestUpdate = std::filesystem::last_write_time(ofToDataPath(mainShaderFile));
+        auto latestUpdate = getLastModified(ofToDataPath(mainShaderFile));
         if (lastUpdateTime != latestUpdate){
             ofLogVerbose("ofxGLSLSandbox")<<"update shaderfile!";
             lastUpdateTime = latestUpdate;
@@ -273,6 +284,31 @@ void ofxShadertoy::update(ofEventArgs &event) {
         }
     }else{
         ofLogVerbose("ofxGLSLSandbox")<<"not found " + mainShaderFile;
+    }
+}
+
+std::time_t ofxShadertoy::getLastModified(std::string path)
+{
+    if( ofFile::doesFileExist(path) )
+    {
+#if OF_VERSION_MAJOR==0 && OF_VERSION_MINOR<=11
+#if OF_VERSION_MINOR<11 || OF_VERSION_PATCH <= 1
+        // <= 0.11.1
+        return std::filesystem::last_write_time(path);
+#else
+        // > 0.11.1
+        const auto ftime = std::filesystem::last_write_time(path);
+        return to_time_t(ftime);
+#endif
+#else
+        // > 0.11
+        const auto ftime = std::filesystem::last_write_time(path);
+        return to_time_t(ftime);
+#endif
+    }
+    else
+    {
+        return 0;
     }
 }
 
